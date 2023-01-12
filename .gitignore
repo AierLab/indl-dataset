@@ -129,5 +129,6 @@ dmypy.json
 .pyre/
 
 # project
-/data
+/data/train 
+/data/test
 *.pt
