@@ -132,3 +132,4 @@ dmypy.json
 /data/train 
 /data/test
 *.pt
+.idea
