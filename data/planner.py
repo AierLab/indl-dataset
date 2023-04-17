@@ -20,6 +20,6 @@ class Planner:
             os.mkdir(train_dir)
         if not os.path.exists(test_dir):
             os.mkdir(test_dir)
-            
+        
         func(train_dir, train_size, self.positive_ratio)
         func(test_dir, test_size, self.positive_ratio)
