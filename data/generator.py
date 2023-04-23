@@ -27,6 +27,28 @@ def dataset02(path, size, positive_ratio):
         label_df.loc[len(label_df)] = [name, label, value, rotation, dict['Top_x1'],dict['Top_y1'], dict['Top_x2'], dict['Top_y2'], dict['Bottom_x1'], dict['Bottom_y1'], dict['Bottom_x2'], dict['Bottom_y2']]
         
     label_df.to_csv(os.path.join(path, "label.csv"))
+
+    
+#Poggendorff illusion
+def dataset03(path, size, positive_ratio):
+    label_df = pd.DataFrame(columns=['label','Illusion_Strength', 'Difference', 'Left_x1', 'Left_y1', 'Left_x2', 'Left_y2', 'Right_x1', 'Right_y1','Right_x2', 'Right_y2','Angle','Rectangle_Height','Rectangle_Width'])
+    for i in range(size):
+        label = int(np.random.rand()> positive_ratio)
+        if (label):
+            diff = 0.1 + 0.3 * np.random.rand()
+        else: 
+            diff = 0
+        strenth = -np.random.randint(1, 300)
+        poggendorff = pyllusion.Poggendorff(illusion_strength=strenth, difference=diff)
+        img = poggendorff.to_image(width=800, height=600)
+        fn = lambda x : 255 if x > 210 else 0
+        img = img.convert("L").point(fn, mode='1')
+        dict = poggendorff.get_parameters()
+        img.save(f'poggendorff{i}.png')
+        label_df.loc[len(label_df)] = [label, dict['Illusion_Strength'], dict['Difference'], dict['Left_x1'], dict['Left_y1'], dict['Left_x2'], dict['Left_y2'], dict['Right_x1'], dict['Right_y1'],dict['Right_x2'], dict['Right_y2'],dict['Angle'],dict['Rectangle_Height'],dict['Rectangle_Width']]
+
+    label_df.to_csv(os.path.join(path, "label.csv"))
+    
     
 # Vertical–horizontal illusion
 def dataset04(path, size, positive_ratio):
@@ -60,7 +82,28 @@ def dataset04(path, size, positive_ratio):
         label_df.loc[len(label_df)] = [name, label, xl, yl]
     label_df.to_csv(os.path.join(path, "label.csv"))
     
-
+#Zollner illusion
+# 8 rows represent a sample
+def dataset05(path, size, positive_ratio):
+    df0 = pd.DataFrame()
+    for i in range(size):
+        label = int(np.random.rand()> positive_ratio)
+        if (label):
+            diff = 9 * np.random.rand()+1
+        else: 
+            diff = 0
+        strenth = np.random.randint(55, 80)
+        zollner = pyllusion.Zollner(illusion_strength=55, difference=diff)
+        img = zollner.to_image()
+        fn = lambda x : 255 if x > 210 else 0
+        img = img.convert("L").point(fn, mode='1')
+        dict = zollner.get_parameters()
+        dict['label'] = label
+        df = pd.DataFrame(dict)
+        df0 = pd.concat([df0, df], ignore_index=True)
+        img.save(f'zollner{i}.png')
+    df0.to_csv(os.path.join(path, "label.csv"))
+    
 # RED YELLOW BOUNDARY
 def dataset06(path, size, positive_ratio):
     label_df = pd.DataFrame(columns = ["name", "label", "width", "x", "y", "r", "g", "b"])
