@@ -31,21 +31,23 @@ def dataset02(path, size, positive_ratio):
     
 #Poggendorff illusion
 def dataset03(path, size, positive_ratio):
-    label_df = pd.DataFrame(columns=['label','Illusion_Strength', 'Difference', 'Left_x1', 'Left_y1', 'Left_x2', 'Left_y2', 'Right_x1', 'Right_y1','Right_x2', 'Right_y2','Angle','Rectangle_Height','Rectangle_Width'])
-    for i in range(size):
+    label_df = pd.DataFrame(columns=['name', 'label', 'value', 'Illusion_Strength', 'Left_x1', 'Left_y1', 'Left_x2', 'Left_y2', 'Right_x1', 'Right_y1','Right_x2', 'Right_y2','Angle','Rectangle_Height','Rectangle_Width'])
+    for i in tqdm(range(size)):
         label = int(np.random.rand()> positive_ratio)
         if (label):
-            diff = 0.1 + 0.3 * np.random.rand()
-        else: 
             diff = 0
-        strenth = -np.random.randint(1, 300)
+        else: 
+            diff = 0.1 + 0.3 * np.random.rand()
+        strenth = -np.random.randint(1, 60)
         poggendorff = pyllusion.Poggendorff(illusion_strength=strenth, difference=diff)
-        img = poggendorff.to_image(width=800, height=600)
+        rotation = np.random.randint(0, 180)
+        img = poggendorff.to_image(width=128, height=128).rotate(angle=rotation, fillcolor = (255, 255, 255, 255))
         fn = lambda x : 255 if x > 210 else 0
         img = img.convert("L").point(fn, mode='1')
         dict = poggendorff.get_parameters()
-        img.save(f'poggendorff{i}.png')
-        label_df.loc[len(label_df)] = [label, dict['Illusion_Strength'], dict['Difference'], dict['Left_x1'], dict['Left_y1'], dict['Left_x2'], dict['Left_y2'], dict['Right_x1'], dict['Right_y1'],dict['Right_x2'], dict['Right_y2'],dict['Angle'],dict['Rectangle_Height'],dict['Rectangle_Width']]
+        name = f'poggendorff{i}.png'
+        img.save(os.path.join(path, name))
+        label_df.loc[len(label_df)] = [name, label, dict['Difference'], dict['Illusion_Strength'], dict['Left_x1'], dict['Left_y1'], dict['Left_x2'], dict['Left_y2'], dict['Right_x1'], dict['Right_y1'],dict['Right_x2'], dict['Right_y2'],dict['Angle'],dict['Rectangle_Height'],dict['Rectangle_Width']]
 
     label_df.to_csv(os.path.join(path, "label.csv"))
     
@@ -85,24 +87,25 @@ def dataset04(path, size, positive_ratio):
 #Zollner illusion
 # 8 rows represent a sample
 def dataset05(path, size, positive_ratio):
-    df0 = pd.DataFrame()
-    for i in range(size):
+    label_df = pd.DataFrame(columns=['name', 'label', 'value'])
+    for i in tqdm(range(size)):
         label = int(np.random.rand()> positive_ratio)
         if (label):
-            diff = 9 * np.random.rand()+1
-        else: 
             diff = 0
-        strenth = np.random.randint(55, 80)
+        else: 
+            diff = 9 * np.random.rand()+1
+        # strenth = np.random.randint(55, 80)
         zollner = pyllusion.Zollner(illusion_strength=55, difference=diff)
-        img = zollner.to_image()
+        rotation = np.random.randint(0, 180)
+        img = zollner.to_image(width=128, height=128).rotate(angle=rotation, fillcolor = (255, 255, 255, 255))
         fn = lambda x : 255 if x > 210 else 0
         img = img.convert("L").point(fn, mode='1')
-        dict = zollner.get_parameters()
-        dict['label'] = label
-        df = pd.DataFrame(dict)
-        df0 = pd.concat([df0, df], ignore_index=True)
-        img.save(f'zollner{i}.png')
-    df0.to_csv(os.path.join(path, "label.csv"))
+        # dict = zollner.get_parameters()
+        name = f'zollner{i}.png'
+        img.save(os.path.join(path, name))
+        label_df.loc[len(label_df)] = [name, label, diff]
+
+    label_df.to_csv(os.path.join(path, "label.csv"))
     
 # RED YELLOW BOUNDARY
 def dataset06(path, size, positive_ratio):
