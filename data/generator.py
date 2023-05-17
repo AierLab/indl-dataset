@@ -2,10 +2,54 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+import matplotlib.transforms as transforms
+
 import pandas as pd
 import pyllusion
 from tqdm import tqdm
 
+# Hering Wundt illusion
+def dataset01(path, size, positive_ratio):
+    # # Create a rotation transformation
+    # rotation_transform = transforms.Affine2D()
+
+    label_df = pd.DataFrame(columns=['name', 'label', 'max_slope', 'step_size', 'bend'])
+    
+    for i in tqdm(range(size)):
+        # set the figure size and parameters
+        fig = plt.figure(figsize=(4,4), facecolor='white', dpi = 64)
+        label = int(np.random.rand()< positive_ratio)
+        max_slope = np.random.rand() * 5 + 1
+        step_size = np.random.rand() * 0.15 + 0.1
+        bend = 0
+        # generate radiating lines
+        for angle in np.arange(-max_slope, max_slope, step_size):
+            plt.plot(np.arange(-2,2,0.01), angle * np.arange(-2,2,0.01), 'k')
+
+        # generate the straight lines
+        if label: #parallel
+            plt.plot([-1,-1], [-4,4], 'r', linewidth=2)
+            plt.plot([1,1], [-4,4], 'r', linewidth=2)
+        else: #bended
+            bend = 0
+            while bend == 0:
+                bend = np.random.rand() * 0.08
+            sign = 1 if np.random.rand() > 0.5 else -1
+            # print(sign)
+            plt.plot([-1,-(1-sign * bend),-1], [-4,0,4], 'r', linewidth=2)
+            plt.plot([1,(1-sign * bend),1], [-4,0,4], 'r', linewidth=2)
+        # hide axes
+        plt.axis('off')
+        # set aspect ratio to 'equal' to prevent distortion
+        name = f'hering{i}.png'
+        # # Apply the transformation to the figure
+        # fig.set_transform(rotation_transform.rotate_deg(np.random.randint(0, 180)))
+        # plt.show()
+        fig.savefig(os.path.join(path, name))
+        label_df.loc[len(label_df)] = [name, label, max_slope, step_size, bend]
+    label_df.to_csv(os.path.join(path, "label.csv"))
+
+    
 # Muller-Lyerillusion
 def dataset02(path, size, positive_ratio):
     label_df = pd.DataFrame(columns=['name', 'label', 'value', 'rotation', 'Top_x1', 'Top_y1', 'Top_x2', 'Top_y2', 'Bottom_x1', 'Bottom_y1', 'Bottom_x2', 'Bottom_y2'])
