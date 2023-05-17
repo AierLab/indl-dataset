@@ -10,12 +10,15 @@ from tqdm import tqdm
 def dataset02(path, size, positive_ratio):
     label_df = pd.DataFrame(columns=['name', 'label', 'value', 'rotation', 'Top_x1', 'Top_y1', 'Top_x2', 'Top_y2', 'Bottom_x1', 'Bottom_y1', 'Bottom_x2', 'Bottom_y2'])
     for i in tqdm(range(size)):
-        label = int(np.random.rand() < positive_ratio) #whether two line equal
-        value = 0
-        if label != 1:
-            while value == 0:
-                value = np.random.randint(-500, +500)/1000 # maximum +-1.5 longer
-        mullerlyer = pyllusion.MullerLyer(illusion_strength=30, difference=value, distance=np.random.randint(80, 120)/100)
+        label = int(np.random.rand() < positive_ratio)
+        if (label):
+            diff = 0
+        else: 
+            diff = 0
+            while diff == 0:
+                diff = np.random.randint(-500, +500)/1000
+        strength = -np.random.randint(25, 35)
+        mullerlyer = pyllusion.MullerLyer(illusion_strength=strength, difference=diff, distance=np.random.randint(80, 120)/100)
         rotation = np.random.randint(0, 180)
         img = mullerlyer.to_image(width=128, height=128, outline=4).rotate(angle=rotation, fillcolor = (255, 255, 255, 255))
         fn = lambda x : 255 if x > 210 else 0
@@ -24,7 +27,7 @@ def dataset02(path, size, positive_ratio):
         name = f"mullerlyer{i}.png"
         img.save(os.path.join(path, name))
         # print(len(label_df) )
-        label_df.loc[len(label_df)] = [name, label, value, rotation, dict['Top_x1'],dict['Top_y1'], dict['Top_x2'], dict['Top_y2'], dict['Bottom_x1'], dict['Bottom_y1'], dict['Bottom_x2'], dict['Bottom_y2']]
+        label_df.loc[len(label_df)] = [name, label, diff, rotation, dict['Top_x1'],dict['Top_y1'], dict['Top_x2'], dict['Top_y2'], dict['Bottom_x1'], dict['Bottom_y1'], dict['Bottom_x2'], dict['Bottom_y2']]
         
     label_df.to_csv(os.path.join(path, "label.csv"))
 
@@ -33,13 +36,15 @@ def dataset02(path, size, positive_ratio):
 def dataset03(path, size, positive_ratio):
     label_df = pd.DataFrame(columns=['name', 'label', 'value', 'Illusion_Strength', 'Left_x1', 'Left_y1', 'Left_x2', 'Left_y2', 'Right_x1', 'Right_y1','Right_x2', 'Right_y2','Angle','Rectangle_Height','Rectangle_Width'])
     for i in tqdm(range(size)):
-        label = int(np.random.rand()> positive_ratio)
+        label = int(np.random.rand() < positive_ratio)
         if (label):
             diff = 0
         else: 
-            diff = 0.1 + 0.3 * np.random.rand()
-        strenth = -np.random.randint(1, 60)
-        poggendorff = pyllusion.Poggendorff(illusion_strength=strenth, difference=diff)
+            diff = 0
+            while diff == 0:
+                diff = 0.3 * np.random.rand()
+        strength = -np.random.randint(1, 60)
+        poggendorff = pyllusion.Poggendorff(illusion_strength=strength, difference=diff)
         rotation = np.random.randint(0, 180)
         img = poggendorff.to_image(width=128, height=128).rotate(angle=rotation, fillcolor = (255, 255, 255, 255))
         fn = lambda x : 255 if x > 210 else 0
@@ -54,34 +59,26 @@ def dataset03(path, size, positive_ratio):
     
 # Vertical–horizontal illusion
 def dataset04(path, size, positive_ratio):
-    minL = 1
-    scale = 0.5
-    
-    label_df = pd.DataFrame(columns = ["name", "label", "x_length", "y_length"])
+    label_df = pd.DataFrame(columns=['name', 'label', 'value'])
     for i in tqdm(range(size)):
-        if np.random.rand() > positive_ratio:
-            xl = minL + np.random.rand() * scale
-            yl = minL + np.random.rand() * scale
-        else:
-            xl = minL + np.random.rand() * scale
-            yl = xl
-        
-        if (xl == yl):
-            label = 1
-        else:
-            label = 0
-
-        fig = plt.figure(figsize=(4,4), facecolor='white', dpi = 32)
-        ax1 = fig.add_subplot(111, aspect = 'equal')
-        ax1.set_axis_off()
-        ax1.plot([0, 0], [0, yl], linewidth = 1.3, c = 'black')
-        ax1.plot([-xl/2, xl/2], [0, 0], linewidth = 1.3, c = 'black')
-        
+        label = int(np.random.rand() < positive_ratio)
+        if (label):
+            diff = 0
+        else: 
+            diff = 0
+            while diff == 0:
+                diff = 0.3 * np.random.rand()
+        strength = -np.random.randint(60, 90)
+        zollner = pyllusion.VerticalHorizontal(illusion_strength=strength, difference=diff)
+        # rotation = np.random.randint(0, 180)
+        img = zollner.to_image(width=128, height=128)
+        fn = lambda x : 255 if x > 210 else 0
+        img = img.convert("L").point(fn, mode='1')
+        # dict = zollner.get_parameters()
         name = f'vertical{i}.png'
-    
-        fig.savefig(os.path.join(path, name))
-        
-        label_df.loc[len(label_df)] = [name, label, xl, yl]
+        img.save(os.path.join(path, name))
+        label_df.loc[len(label_df)] = [name, label, diff]
+
     label_df.to_csv(os.path.join(path, "label.csv"))
     
 #Zollner illusion
@@ -89,13 +86,15 @@ def dataset04(path, size, positive_ratio):
 def dataset05(path, size, positive_ratio):
     label_df = pd.DataFrame(columns=['name', 'label', 'value'])
     for i in tqdm(range(size)):
-        label = int(np.random.rand()> positive_ratio)
+        label = int(np.random.rand() < positive_ratio)
         if (label):
             diff = 0
         else: 
-            diff = 9 * np.random.rand()+1
-        # strenth = np.random.randint(55, 80)
-        zollner = pyllusion.Zollner(illusion_strength=55, difference=diff)
+            diff = 0
+            while diff == 0:
+                diff = 9 * np.random.rand()
+        strength = np.random.randint(45, 65)
+        zollner = pyllusion.Zollner(illusion_strength=strength, difference=diff)
         rotation = np.random.randint(0, 180)
         img = zollner.to_image(width=128, height=128).rotate(angle=rotation, fillcolor = (255, 255, 255, 255))
         fn = lambda x : 255 if x > 210 else 0
