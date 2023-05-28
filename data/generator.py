@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib.transforms as transforms
+from PIL import Image
 
 import pandas as pd
 import pyllusion
@@ -47,6 +48,13 @@ def dataset01(path, size, positive_ratio):
         # plt.show()
         fig.savefig(os.path.join(path, name))
         label_df.loc[len(label_df)] = [name, label, max_slope, step_size, bend]
+        
+        img = Image.open(os.path.join(path, name))
+        rotate_img = img.rotate(np.random.randint(1, 180))                   
+        plt.imshow(rotate_img)
+        plt.axis('off')
+        plt.savefig(os.path.join(path, name))
+        
     label_df.to_csv(os.path.join(path, "label.csv"))
 
     
