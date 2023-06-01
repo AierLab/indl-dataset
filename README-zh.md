@@ -87,3 +87,5 @@ Jupyter笔记本：
 
 ---
 由 Rabbit Magic Workhouse 维护。
+🌸QQ群：[兔叽の魔术工房](https://jq.qq.com/?_wv=1027&k=EaGddTQg) (942848525)
+⭐B站账号：[白拾Official](https://space.bilibili.com/98639326)
