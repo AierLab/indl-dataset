@@ -7,7 +7,7 @@ This repository hosts code and data for our project evaluating deep learning mod
 The goal of our work is to shed light on the 'black box' nature of deep learning models by investigating their ability to handle complex interplay of perception and logic that visual illusions offer. For more details about our approach, refer to our paper linked here: [InDL: A New Datasets and Benchmark for In-Diagram Logic Interpreting based on Visual Illusion
 ](https://arxiv.org/abs/2305.17716).
 
-![The 5 dataset images, with the corresponding labels.](https://github.com/rabbit-magic-wh/InDL/assets/55401837/3df04e09-ed85-45c9-a49c-6c717ec4443b)
+![The 5 dataset images, with the corresponding labels.](https://github.com/rabbit-magic-wh/InDL/assets/55401837/8ebdec35-d39b-4abf-a765-c282406e7f7c)
 
 ## Repository Structure
 
