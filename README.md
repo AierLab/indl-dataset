@@ -86,3 +86,5 @@ For any questions or issues, please open a GitHub issue. We'll respond as soon a
 
 ---
 _Maintained by Rabbit Magic Workhouse, an open source group._
+🌸QQ chat group：[兔叽の魔术工房](https://jq.qq.com/?_wv=1027&k=EaGddTQg) (942848525)
+⭐Bilibili：[白拾Official](https://space.bilibili.com/98639326)
