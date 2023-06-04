@@ -30,7 +30,7 @@ class Worker:
         self.learner.unfreeze()
     
     def report_train_history(self):
-        history = learner.recorder.values
+        history = self.learner.recorder.values
 
         df = pd.DataFrame(history, columns=['train_loss', 'valid_loss', 'accuracy'])
         df.to_csv('./models/{exp_name}/{model_name}_history.csv', index=False)
