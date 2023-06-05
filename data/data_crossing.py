@@ -9,12 +9,7 @@ def copy_png_files(src_folder1, src_folder2, dest_folder):
         os.makedirs(dest_folder)
 
     # Copy .png files from source folders to destination folder
-    if src_folder1 == src_folder2:
-        list_src_folder = [src_folder1, src_folder2]
-    else:
-        list_src_folder = [src_folder1]
-        
-    for src_folder in list_src_folder:
+    for src_folder in [src_folder1, src_folder2]:
         for file_name in tqdm(os.listdir(src_folder)):
             if file_name.endswith('.png'):
                 shutil.copy(os.path.join(src_folder, file_name), dest_folder)
@@ -22,12 +17,7 @@ def copy_png_files(src_folder1, src_folder2, dest_folder):
 def combine_csv_files(src_folder1, src_folder2, dest_folder, dest_file_name):
     # Find .csv files in source folders
     csv_files = []
-    if src_folder1 == src_folder2:
-        list_src_folder = [src_folder1, src_folder2]
-    else:
-        list_src_folder = [src_folder1]
-        
-    for src_folder in list_src_folder:
+    for src_folder in [src_folder1, src_folder2]:
         for file_name in os.listdir(src_folder):
             if file_name.endswith('.csv'):
                 csv_files.append(os.path.join(src_folder, file_name))
@@ -49,13 +39,12 @@ for i in range(1, 6):
             src_folder2 = f'{data_type}/dataset0{j}'
             dest_folder = f'{data_type}/dataset0{i}x0{j}'
             
-            if os.path.exists(dest_folder):
-                continue
-
-            # Copy .png files
-            copy_png_files(src_folder1, src_folder2, dest_folder)
-
+            if not os.path.exists(dest_folder):
+                # Copy .png files
+                copy_png_files(src_folder1, src_folder2, dest_folder)
+            
             # Combine .csv files
             dest_file_name = 'label.csv'
-            combine_csv_files(src_folder1, src_folder2, dest_folder, dest_file_name)
+            if not os.path.exists(os.path.join(dest_folder, dest_file_name)):
+                combine_csv_files(src_folder1, src_folder2, dest_folder, dest_file_name)
 
