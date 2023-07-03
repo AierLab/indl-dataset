@@ -71,7 +71,7 @@ This project is licensed under the Apache-2.0 license. We welcome contributions 
 
 For any questions or issues, please open a GitHub issue. We'll respond as soon as possible.
 
-## Reference
+## Citation Info
 
 ```bibtex
 @misc{yang2023indl,
@@ -85,6 +85,7 @@ For any questions or issues, please open a GitHub issue. We'll respond as soon a
 ```
 
 ---
-_Maintained by Rabbit Magic Workhouse, an open source group._
+_Maintained by AierLab, an open-source group._
+🤖GitHub discussions: [Disscussions](https://github.com/orgs/AierLab/discussions)
 🌸QQ chat group：[兔叽の魔术工房](https://jq.qq.com/?_wv=1027&k=EaGddTQg) (942848525)
 ⭐Bilibili：[白拾Official](https://space.bilibili.com/98639326)
