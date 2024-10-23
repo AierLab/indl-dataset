@@ -17,9 +17,9 @@ class Planner:
         test_dir = os.path.join(self.test_dir, func.__name__)
                 
         if not os.path.exists(train_dir): 
-            os.mkdir(train_dir)
+            os.makedirs(train_dir)
         if not os.path.exists(test_dir):
-            os.mkdir(test_dir)
+            os.makedirs(test_dir)
         
         func(train_dir, train_size, self.positive_ratio)
         func(test_dir, test_size, self.positive_ratio)
